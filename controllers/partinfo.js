@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/getItems', async(req,res) => {
     try {
-        const items = await autoParts.find();
+        const items = await autoParts.find().limit(10);
         console.log(items);
 
         res.status(200).json({
