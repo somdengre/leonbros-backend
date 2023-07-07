@@ -6,7 +6,7 @@ const connectDatabse = () => {
     .then((data) => {
       console.log(`Connected with database : ${data.connection.host}`);
     })
-    .catch(err => {
+    .catch(err => { 
       console.log(err)
       console.log("Unable to connect to db")
     })
