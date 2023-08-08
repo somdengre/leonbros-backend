@@ -17,7 +17,9 @@ router.get('/getItems', async(req,res) => {
         // const apiFeatures = new Features(autoParts.find(), req.query);
         // const  searchedproducts = apiFeatures.search();
         // console.log(searchedproducts);
-        let products = await apiFeatures.query;
+        // let products = await apiFeatures.query;
+        let searchQuery = req.query;
+        let products = await autoParts.find({ OEM: { $regex: `/${searchQuery}/`, $options: 'i' } })
         let filteredProductsCount = products.length;
 
         apiFeatures.pagination(resultPerPage).search();
