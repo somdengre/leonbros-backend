@@ -9,24 +9,24 @@ router.get('/getItems', async(req,res) => {
     try {
 
         
-
         const resultPerPage = 16;
         const productsCount = await autoParts.countDocuments();
         const apiFeatures = new Features(autoParts.find(), req.query).search();
-
+        
         // const apiFeatures = new Features(autoParts.find(), req.query);
         // const  searchedproducts = apiFeatures.search();
         // console.log(searchedproducts);
-        // let products = await apiFeatures.query;
-        let searchQuery = req.query;
-        let products = await autoParts.find({ OEM: { $regex: `/${searchQuery}/`, $options: 'i' } })
+        let products = await apiFeatures.query;
+        let searchQuery = req.query.keyword;
         let filteredProductsCount = products.length;
-
+        
         apiFeatures.pagination(resultPerPage).search();
-
+        
         products = await apiFeatures.query.clone();
-        const items = await autoParts.find();
-        console.log(items);
+        const re = new RegExp(`.*${searchQuery}.*`);
+        console.log("Search query",searchQuery,re)
+        const items = await autoParts.find({ oem: { $regex: re, $options: 'i' } });
+        console.log(items.length);
         
 
         res.status(200).json({
@@ -36,7 +36,7 @@ router.get('/getItems', async(req,res) => {
             productsCount,
             resultPerPage,
             filteredProductsCount,
-            data:products
+            data:items
         })
     } catch (error) {
         console.log(error);
