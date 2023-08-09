@@ -7,8 +7,6 @@ const router = express.Router()
 
 router.get('/getItems', async(req,res) => {
     try {
-
-        
         const resultPerPage = 16;
         const productsCount = await autoParts.countDocuments();
         const apiFeatures = new Features(autoParts.find(), req.query).search();
@@ -26,7 +24,9 @@ router.get('/getItems', async(req,res) => {
         const re = new RegExp(`.*${searchQuery}.*`);
         console.log("Search query",searchQuery,re)
         const items = await autoParts.find({ oem: { $regex: re, $options: 'i' } });
-        console.log(items.length);
+        console.log(items.length, products.length);
+
+        const result = searchQuery ? items : products
         
 
         res.status(200).json({
@@ -36,7 +36,7 @@ router.get('/getItems', async(req,res) => {
             productsCount,
             resultPerPage,
             filteredProductsCount,
-            data:items
+            data:result
         })
     } catch (error) {
         console.log(error);
