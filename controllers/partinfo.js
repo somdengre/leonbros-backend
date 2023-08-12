@@ -1,4 +1,4 @@
-const autoParts =require("../schema.js");
+const autoParts =require("../schemas/schema.js");
 const express = require('express')
 const Features = require("../utils/features.js");
 
